@@ -4,8 +4,20 @@ import functions.prep_data as prep
 import functions.eval_data as eval
 import models.helpers as helpers
 
+model = "ML"
+# model = "baseline"
+# model = "perCapita"
 
-import models.histGradientRegressor as model
+
+# MODEL IMPORTS ----------------------------------------------------------------
+if model == "ML":
+    import models.histGradientRegressor as model
+
+if model == "baseline":
+    import models.baseline_model as model
+
+if model == "perCapita":
+    import models.baseline_model as model
 
 
 
@@ -35,32 +47,43 @@ print(y_train)
 
 # FIT TRAINING DATA ----------------------------------------------------------
 
-# load pipe
-pipe = model.load_pipe(features = prep.features, 
-                       order_regressorChain = helpers.order_by_mean(y_train))
+if model == "ML":
+    # load pipe
+    model = model.load_pipe(features = prep.features, 
+                        order_regressorChain = helpers.order_by_mean(y_train))
+
+if model == "baseline":
+    # load pipe
+    model = model.GroupMeanRegressor(group_feature = "GBAGESLACHT")
+
+if model == "perCapita":
+    # load pipe
+    model = model.MeanRegressor()
+
 
 print("Fitting model to data ...")
-pipe.fit(x_train, y_train)
+model.fit(x_train, y_train)
 
 # save model
 import joblib
-joblib.dump(pipe, "pipe_train.joblib")
+model_filename = f"model_{model}_train.joblib"
+joblib.dump(model, model_filename)
 
 
 
 # load model
-import joblib
 print("Loading model from files ...")
-pipe = joblib.load("pipe_train.joblib")
 
-
+import joblib
+model_filename = f"model_{model}_train.joblib"
+model = joblib.load(model_filename)
 
 
 
 # PREDICT TRAINING DATA -------------------------------------------------------
 
 print("Predicting training data ...")
-y_train_pred = pipe.predict(x_train)
+y_train_pred = model.predict(x_train)
 y_train_pred = pl.DataFrame(y_train_pred)
 y_train_pred.columns = y_names
 
@@ -84,7 +107,7 @@ y_test = (df_true
            )
 
 print("Predicting test data ...")
-y_test_pred = pipe.predict(x_test)
+y_test_pred = model.predict(x_test)
 y_test_pred = pl.DataFrame(y_test_pred)
 y_test_pred.columns = y_names
 
@@ -134,7 +157,7 @@ print(y_test_pred)
 
 
 
-filename = "F:/Documents/Data/predicted_timeUse_ML_tboPPs_testData.parquet"
+filename = f"F:/Documents/Data/predicted_timeUse_{model}_tboPPs_testData.parquet"
 y_test_pred.write_parquet(filename)
 
 print(f"Successfully wrote {filename}")

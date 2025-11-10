@@ -9,12 +9,12 @@ model_name = "ML"
 
 # LOAD DATA ------------------------------------------------------------------
 
-df_demographics = pl.read_parquet("F:/Documents/Data/df_demographics.parquet")
+df_demographics = pl.read_parquet("data/true/df_demographics.parquet")
 
 x = df_demographics.select(prep.features.keys())
 
 # read y column names
-y_names = pl.read_parquet_schema("F:/Documents/Data/TBO_aggregated.parquet").keys()
+y_names = pl.read_parquet_schema("data/true/TBO_aggregated.parquet").keys()
 
 
 
@@ -24,22 +24,16 @@ y_names = pl.read_parquet_schema("F:/Documents/Data/TBO_aggregated.parquet").key
 import joblib
 print(f"Loading {model_name} model from files ...")
 
-if model_name == "ML":
-    pipe = joblib.load("pipe.joblib")
+model_filename = "models/model_" + model_name + ".joblib"
 
-if model_name == "baseline":
-    pipe = joblib.load("baseline_model.joblib")
-
-if model_name == "perCapita":
-    pipe = joblib.load("perCapita_model.joblib")
-
+model = joblib.load(model_filename)
 
 
 
 # PREDICT DATA -------------------------------------------------------
 
 print("Predicting time-use ...")
-y_pred = pipe.predict(x)
+y_pred = model.predict(x)
 y_pred = pl.DataFrame(y_pred)
 y_pred.columns = y_names # potentially redundant (in baseline)
 
@@ -57,7 +51,7 @@ y_pred = y_pred[cols]
 
 # SAVE PREDICTED DATA -------------------------------------------------
 
-filename = "F:/Documents/Data/predicted_timeUse_" + model_name + ".parquet"
+filename = "data/predicted/timeUse_" + model_name + ".parquet"
 y_pred.write_parquet(filename)
 
 print(f"Successfully wrote {filename}")

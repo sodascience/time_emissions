@@ -4,8 +4,20 @@ import functions.prep_data as prep
 import functions.eval_data as eval
 
 
-# model
-import models.histGradientRegressor as model
+model = "ML"
+# model = "baseline"
+# model = "perCapita"
+
+
+
+# MODEL IMPORTS ----------------------------------------------------------------
+if model == "ML":
+    import models.histGradientRegressor as model
+
+if model == "baseline":
+    import models.baseline_model as model
+
+
 
 
 # LOAD DATA ------------------------------------------------------------------
@@ -27,23 +39,37 @@ print(y)
 
 # FIT MODEL ----------------------------------------------------------
 
-# load pipe
-pipe = model.load_pipe(features = prep.features)
+if model == "ML":
+    # load pipe
+    model = model.load_pipe(features = prep.features)
+
+if model == "baseline":
+    # load pipe
+    model = model.GroupMeanRegressor(group_feature = "GBAGESLACHT")
+
+if model == "perCapita":
+    # load pipe
+    model = model.MeanRegressor()
+
 
 print("Fitting model to data ...")
-pipe.fit(x, y)
+model.fit(x, y)
 
-# save model
+# save model to models folder
+print("Saving model to file ...")
+
 import joblib
-joblib.dump(pipe, "pipe.joblib")
+model_filename = "models/model_" + model + ".joblib"
+joblib.dump(model, model_filename)
 
 
 
 # load model
-import joblib
 print("Loading model from files ...")
-pipe = joblib.load("pipe.joblib")
 
+import joblib
+model_filename = "models/model_" + model + ".joblib"
+model = joblib.load(model_filename)
 
 
 
@@ -51,7 +77,7 @@ pipe = joblib.load("pipe.joblib")
 # PREDICT DATA -------------------------------------------------------
 
 print("Predicting training data ...")
-y_pred = pipe.predict(x)
+y_pred = model.predict(x)
 y_pred = pl.DataFrame(y_pred)
 y_pred.columns = y_names
 
