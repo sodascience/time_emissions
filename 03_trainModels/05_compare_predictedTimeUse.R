@@ -12,9 +12,9 @@ source("F:/Documents/R_code/groupActivities.R")
 source("F:/Documents/R_code/colors.R")
 
 # read time per individual & group activities
-df_time_baseline <- read_parquet("F:/Documents/Data/predicted_timeUse_baseline_tboPPs_testData.parquet") 
-df_time_ML <- read_parquet("F:/Documents/Data/predicted_timeUse_ML_tboPPs_testData.parquet")
-df_time_true <- read_parquet("F:/Documents/Data/TBO_aggregated.parquet") %>%
+df_time_baseline <- read_parquet("data/predicted/timeUse_baseline_tboPPs_testData.parquet") 
+df_time_ML <- read_parquet("data/predicted/timeUse_ML_tboPPs_testData.parquet")
+df_time_true <- read_parquet("data/true/TBO_aggregated.parquet") %>%
   subset(RINPERSOON %in% df_time_baseline$RINPERSOON)
 
 df_errors_baseline <- df_time_baseline

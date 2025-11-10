@@ -24,7 +24,7 @@ y_names = pl.read_parquet_schema("data/true/TBO_aggregated.parquet").keys()
 import joblib
 print(f"Loading {model_name} model from files ...")
 
-model_filename = "models/model_" + model_name + ".joblib"
+model_filename = "trained_models/" + model_name + ".joblib"
 
 model = joblib.load(model_filename)
 

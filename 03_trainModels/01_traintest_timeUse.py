@@ -66,7 +66,7 @@ model.fit(x_train, y_train)
 
 # save model
 import joblib
-model_filename = f"model_{model}_train.joblib"
+model_filename = f"trained_models/{model}_train.joblib"
 joblib.dump(model, model_filename)
 
 
@@ -75,7 +75,7 @@ joblib.dump(model, model_filename)
 print("Loading model from files ...")
 
 import joblib
-model_filename = f"model_{model}_train.joblib"
+model_filename = f"trained_models/{model}_train.joblib"
 model = joblib.load(model_filename)
 
 
@@ -157,7 +157,7 @@ print(y_test_pred)
 
 
 
-filename = f"F:/Documents/Data/predicted_timeUse_{model}_tboPPs_testData.parquet"
+filename = f"data/predicted/timeUse_{model}_tboPPs_testData.parquet"
 y_test_pred.write_parquet(filename)
 
 print(f"Successfully wrote {filename}")

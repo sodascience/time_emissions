@@ -59,7 +59,7 @@ model.fit(x, y)
 print("Saving model to file ...")
 
 import joblib
-model_filename = "models/model_" + model + ".joblib"
+model_filename = "trained_models/" + model + ".joblib"
 joblib.dump(model, model_filename)
 
 
@@ -68,7 +68,7 @@ joblib.dump(model, model_filename)
 print("Loading model from files ...")
 
 import joblib
-model_filename = "models/model_" + model + ".joblib"
+model_filename = "trained_models/" + model + ".joblib"
 model = joblib.load(model_filename)
 
 
