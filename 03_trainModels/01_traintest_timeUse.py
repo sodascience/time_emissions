@@ -1,22 +1,23 @@
 import polars as pl
+import pathlib
 
 import functions.prep_data as prep
 import functions.eval_data as eval
 import models.helpers as helpers
 
-model = "ML"
-# model = "baseline"
-# model = "perCapita"
+model_name = "ML"
+# model_name = "baseline"
+# model_name = "perCapita"
 
 
 # MODEL IMPORTS ----------------------------------------------------------------
-if model == "ML":
+if model_name == "ML":
     import models.histGradientRegressor as model
 
-if model == "baseline":
+if model_name == "baseline":
     import models.baseline_model as model
 
-if model == "perCapita":
+if model_name == "perCapita":
     import models.baseline_model as model
 
 
@@ -47,16 +48,16 @@ print(y_train)
 
 # FIT TRAINING DATA ----------------------------------------------------------
 
-if model == "ML":
+if model_name == "ML":
     # load pipe
     model = model.load_pipe(features = prep.features, 
                         order_regressorChain = helpers.order_by_mean(y_train))
 
-if model == "baseline":
+if model_name == "baseline":
     # load pipe
     model = model.GroupMeanRegressor(group_feature = "GBAGESLACHT")
 
-if model == "perCapita":
+if model_name == "perCapita":
     # load pipe
     model = model.MeanRegressor()
 
@@ -66,8 +67,9 @@ model.fit(x_train, y_train)
 
 # save model
 import joblib
-model_filename = f"trained_models/{model}_train.joblib"
-joblib.dump(model, model_filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"trained_models"/f"{model_name}_train.joblib"
+save_path.parent.mkdir(parents = True, exist_ok = True)
+joblib.dump(model, save_path)
 
 
 
@@ -75,8 +77,10 @@ joblib.dump(model, model_filename)
 print("Loading model from files ...")
 
 import joblib
-model_filename = f"trained_models/{model}_train.joblib"
-model = joblib.load(model_filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"trained_models"/f"{model_name}_train.joblib"
+model = joblib.load(save_path)
+
+
 
 
 
@@ -157,7 +161,8 @@ print(y_test_pred)
 
 
 
-filename = f"data/predicted/timeUse_{model}_tboPPs_testData.parquet"
-y_test_pred.write_parquet(filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}_tboPPs_testData.parquet"
+save_path.parent.mkdir(parents = True, exist_ok = True)
+y_test_pred.write_parquet(save_path)
 
-print(f"Successfully wrote {filename}")
+print(f"Successfully wrote {save_path}")

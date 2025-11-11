@@ -1,62 +1,39 @@
 import polars as pl
+import pathlib
+
+model_name = "ML"
+# model_name = "baseline"
+# model_name = "perCapita"
 
 # READ TBO DATA ----------------------------------------------------------------
 
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"TBO_aggregated.parquet"
+
 lf_TBO = (
-    pl.scan_parquet("data/true/TBO_aggregated.parquet")
+    pl.scan_parquet(save_path)
     .select("RINPERSOON")
 )
 
 
 
 # READ PREDICTED TIME-USE -------------------------------------------------------
-# read predicted time-use of population
 
-df_ML = (
-    pl.scan_parquet("data/predicted/timeUse_ML.parquet")
-    .join(lf_TBO, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}.parquet"
+
+df = (
+    pl.scan_parquet(save_path)
+    .join(lf_TBO, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_TBO
     .collect()
 )
 
-print(df_ML)
+print(df)
 
-
-# read baseline predictions
-
-df_baseline = (
-    pl.scan_parquet("data/predicted/timeUse_baseline.parquet")
-    .join(lf_TBO, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
-    .collect()
-)
-
-print(df_baseline)
-
-
-# read perCapita predictions
-
-df_perCapita = (
-    pl.scan_parquet("data/predicted/timeUse_perCapita.parquet")
-    .join(lf_TBO, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
-    .collect()
-)
-
-print(df_perCapita)
 
 
 
 # SAVE DATA ---------------------------------------------------------------------
 
-# machine learning
-filename = "data/predicted/timeUse_ML_tboPPs.parquet"
-df_ML.write_parquet(filename)
-print(f"Successfully wrote {filename}")
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}_tboPPs.parquet"
 
-# baseline
-filename = "data/predicted/timeUse_baseline_tboPPs.parquet"
-df_baseline.write_parquet(filename)
-print(f"Successfully wrote {filename}")
-
-# perCapita
-filename = "data/predicted/timeUse_perCapita_tboPPs.parquet"
-df_perCapita.write_parquet(filename)
-print(f"Successfully wrote {filename}")
+df.write_parquet(save_path)
+print(f"Successfully wrote {save_path}")

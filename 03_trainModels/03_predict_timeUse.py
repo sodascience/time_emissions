@@ -1,4 +1,5 @@
 import polars as pl
+import pathlib
 
 import functions.prep_data as prep
 
@@ -9,12 +10,14 @@ model_name = "ML"
 
 # LOAD DATA ------------------------------------------------------------------
 
-df_demographics = pl.read_parquet("data/true/df_demographics.parquet")
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"df_demographics.parquet"
+df_demographics = pl.read_parquet(save_path)
 
 x = df_demographics.select(prep.features.keys())
 
 # read y column names
-y_names = pl.read_parquet_schema("data/true/TBO_aggregated.parquet").keys()
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"TBO_aggregated.parquet"
+y_names = pl.read_parquet_schema(save_path).keys()
 
 
 
@@ -24,9 +27,8 @@ y_names = pl.read_parquet_schema("data/true/TBO_aggregated.parquet").keys()
 import joblib
 print(f"Loading {model_name} model from files ...")
 
-model_filename = "trained_models/" + model_name + ".joblib"
-
-model = joblib.load(model_filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"trained_models"/f"{model_name}.joblib"
+model = joblib.load(save_path)
 
 
 
@@ -51,11 +53,9 @@ y_pred = y_pred[cols]
 
 # SAVE PREDICTED DATA -------------------------------------------------
 
-filename = "data/predicted/timeUse_" + model_name + ".parquet"
-y_pred.write_parquet(filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}.parquet"
+save_path.parent.mkdir(parents = True, exist_ok = True)
+y_pred.write_parquet(save_path)
 
-print(f"Successfully wrote {filename}")
-
-
-
+print(f"Successfully wrote {save_path}")
 

@@ -1,9 +1,16 @@
 import polars as pl
+import pathlib
+
+model_name = "ML"
+# model_name = "baseline"
+# model_name = "perCapita"
 
 # READ BUDGET DATA --------------------------------------------------------------
 
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"budget_df.parquet"
+
 lf_budget = (
-    pl.scan_parquet("data/true/budget_df.parquet")
+    pl.scan_parquet(save_path)
     .select("RINPERSOON")
     .rename({"RINPERSOON": "RINPERSOONHKW"})      # rename RINPERSOON to RINPERSOONHKW
 )
@@ -14,8 +21,10 @@ lf_budget = (
 # extend df_budget by adding all household members of households participating in the budget survey
 
 # read df_demographics to match RINPERSOONHKWs to RINPERSOONs
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"df_demographics.parquet"
+
 lf_demographics = (
-    pl.scan_parquet("data/true/df_demographics.parquet")
+    pl.scan_parquet(save_path)
     .select(["RINPERSOON", "RINPERSOONHKW"])
 )
 
@@ -25,53 +34,23 @@ lf_budget = lf_budget.join(lf_demographics, on = "RINPERSOONHKW")
 
 
 # READ PREDICTED TIME-USE -------------------------------------------------------
-# read predicted time-use of population
 
-df_ML = (
-    pl.scan_parquet("data/predicted/timeUse_ML.parquet")
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}.parquet"
+
+df = (
+    pl.scan_parquet(save_path)
     .join(lf_budget, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
     .collect()
 )
 
-print(df_ML)
+print(df)
 
-
-# read baseline predictions
-
-df_baseline = (
-    pl.scan_parquet("data/predicted/timeUse_baseline.parquet")
-    .join(lf_budget, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
-    .collect()
-)
-
-print(df_baseline)
-
-
-# read perCapita predictions
-
-df_perCapita = (
-    pl.scan_parquet("data/predicted/timeUse_perCapita.parquet")
-    .join(lf_budget, on = "RINPERSOON", how = "semi") # only select RINPERSOONs that are also in lf_budget
-    .collect()
-)
-
-print(df_perCapita)
 
 
 
 # SAVE DATA ---------------------------------------------------------------------
 
-# machine learning
-filename = "data/predicted/timeUse_ML_budgetPPs.parquet"
-df_ML.write_parquet(filename)
-print(f"Successfully wrote {filename}")
+save_path = pathlib.Path(__file__).resolve().parents[1]/"data"/"predicted"/f"timeUse_{model_name}_budgetPPs.parquet"
 
-# baseline
-filename = "data/predicted/timeUse_baseline_budgetPPs.parquet"
-df_baseline.write_parquet(filename)
-print(f"Successfully wrote {filename}")
-
-# perCapita
-filename = "data/predicted/timeUse_perCapita_budgetPPs.parquet"
-df_perCapita.write_parquet(filename)
-print(f"Successfully wrote {filename}")
+df.write_parquet(save_path)
+print(f"Successfully wrote {save_path}")

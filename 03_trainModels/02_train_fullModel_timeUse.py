@@ -1,22 +1,23 @@
 import polars as pl
+import pathlib
 
 import functions.prep_data as prep
 import functions.eval_data as eval
 
-
-model = "ML"
-# model = "baseline"
-# model = "perCapita"
-
+model_name = "ML"
+# model_name = "baseline"
+# model_name = "perCapita"
 
 
 # MODEL IMPORTS ----------------------------------------------------------------
-if model == "ML":
+if model_name == "ML":
     import models.histGradientRegressor as model
 
-if model == "baseline":
+if model_name == "baseline":
     import models.baseline_model as model
 
+if model_name == "perCapita":
+    import models.baseline_model as model
 
 
 
@@ -39,15 +40,15 @@ print(y)
 
 # FIT MODEL ----------------------------------------------------------
 
-if model == "ML":
+if model_name == "ML":
     # load pipe
     model = model.load_pipe(features = prep.features)
 
-if model == "baseline":
+if model_name == "baseline":
     # load pipe
     model = model.GroupMeanRegressor(group_feature = "GBAGESLACHT")
 
-if model == "perCapita":
+if model_name == "perCapita":
     # load pipe
     model = model.MeanRegressor()
 
@@ -59,8 +60,9 @@ model.fit(x, y)
 print("Saving model to file ...")
 
 import joblib
-model_filename = "trained_models/" + model + ".joblib"
-joblib.dump(model, model_filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"trained_models"/f"{model_name}.joblib"
+save_path.parent.mkdir(parents = True, exist_ok = True)
+joblib.dump(model, save_path)
 
 
 
@@ -68,8 +70,8 @@ joblib.dump(model, model_filename)
 print("Loading model from files ...")
 
 import joblib
-model_filename = "trained_models/" + model + ".joblib"
-model = joblib.load(model_filename)
+save_path = pathlib.Path(__file__).resolve().parents[1]/"trained_models"/f"{model_name}.joblib"
+model = joblib.load(save_path)
 
 
 
