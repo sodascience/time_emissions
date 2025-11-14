@@ -1,20 +1,20 @@
 import polars as pl
 import pathlib
 
-import dataset_scripts.gbahuishoudenbus as gbahuishoudenbus
-import dataset_scripts.koppelpersoonhuishouden as koppelpersoonhuishouden
-import dataset_scripts.gbapersoontab as gbapersoontab
-import dataset_scripts.hoogsteopltab as hoogsteopltab
-import dataset_scripts.inpatab as inpatab
-import dataset_scripts.secmbus as secmbus
-import dataset_scripts.vehtab as vehtab
-import dataset_scripts.gbaadresobjectbus as gbaadresobjectbus
-import dataset_scripts.energieverbruiktab as energieverbruiktab
+import preprocessing.gbahuishoudenbus as gbahuishoudenbus
+import preprocessing.koppelpersoonhuishouden as koppelpersoonhuishouden
+import preprocessing.gbapersoontab as gbapersoontab
+import preprocessing.hoogsteopltab as hoogsteopltab
+import preprocessing.inpatab as inpatab
+import preprocessing.secmbus as secmbus
+import preprocessing.vehtab as vehtab
+import preprocessing.gbaadresobjectbus as gbaadresobjectbus
+import preprocessing.energieverbruiktab as energieverbruiktab
 
 
-import helpers
+import preprocessing.helpers
 
-demo_file_loc = pathlib.Path(__file__).resolve().parents[1]/"data"/"true"/"df_demographics"
+demo_file_loc = pathlib.Path("processed_data", "true", "df_demographics")
 demo_file_loc.parent.mkdir(parents = True, exist_ok = True)
 
 
