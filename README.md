@@ -16,16 +16,17 @@ This repository is currently under development.
 2. Preprocess and clean survey datasets (e.g., time-use or expenditure surveys)
 3. Train and evaluate machine learning models to predict a survey
 4. Generate population-level predictions from the fitted model
+5. Integrate population-level surveys with each other
 
 
-### Overview of Scripts
+### Overview of Main Scripts
 
 | Script                        | Description                           | Outcome                                                                                       |
 | ----------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | 
-| 01_process_demographics.py    | Integrates multiple CBS datasets      | Parquet file containing all relevant demographic data (at individual & at household level; population data) | 
-| 02_process_survey.py          | Processes survey to be predicted      | Parquet file containing one id variable and all survey variables to be predicted (survey data)              |
-| 03_train_model.py             | Trains, tests, and fits the model that is used to predict survey data | Joblib file containing the final fitted model                               | 
-| 04_predict_survey.py          | Predicts survey data at the population level | Parquet file containing one id variable and all predicted survey variables (population data)         |
+| `01_process_demographics.py`  | Integrates multiple CBS datasets      | `Parquet` file containing all relevant demographic data (at individual & at household level; *population data*) | 
+| `02_process_survey.py`        | Processes survey to be predicted      | `Parquet` file containing one id variable and all survey variables to be predicted (*survey data*)              |
+| `03_train_model.py`           | Trains, tests, and fits the model that is used to predict survey data | `Joblib` file containing the final fitted model                               | 
+| `04_predict_survey.py`        | Predicts survey data at the population level | `Parquet` file containing one id variable and all predicted survey variables (*population data*)         |
 
 
 ### 1. Process Demographics
@@ -52,6 +53,17 @@ Lastly, we fit the model to the whole survey dataset. The resulting model will b
 
 Fourth, we use the fitted model that was created in the last step to predict survey data at the population level. The result is a dataset that contains an id variable together with the predicted variables for the respective survey.
 
+### 5. Integrate Population-Level Surveys
+
+Fifth, we integrate the two surveys with each other. This is a highly context-specific process. In our case, we use a [concordance table](processed_data/meta/mapping_budget-TBO.xlsx) that matches each expenditure variable to a timeuse variable. This allowed us to assign the carbon emissions - calculated from the (predicted) expenditures - to each individual living in a household, on the basis of their predicted timeuse.
+
+*Please note, the code is currently under development*
+
+### 6. Analyse
+
+Sixth, we analyse the population-level data. In our case, we analyse demographic patterns in individual carbon emissions.
+
+*Please note, the code is currently under development*
 
 
 
