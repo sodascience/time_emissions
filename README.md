@@ -18,14 +18,23 @@ This repository is currently under development.
 4. Generate population-level predictions from the fitted model
 
 
+### Overview of Scripts
 
-### Process Demographics
+| Script                        | Description                           | Outcome                                                                                       |
+| ----------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | 
+| 01_process_demographics.py    | Integrates multiple CBS datasets      | Parquet file containing all relevant demographic data (at individual & at household level; population data) | 
+| 02_process_survey.py          | Processes survey to be predicted      | Parquet file containing one id variable and all survey variables to be predicted (survey data)              |
+| 03_train_model.py             | Trains, tests, and fits the model that is used to predict survey data | Joblib file containing the final fitted model                               | 
+| 04_predict_survey.py          | Predicts survey data at the population level | Parquet file containing one id variable and all predicted survey variables (population data)         |
+
+
+### 1. Process Demographics
 
 First, we create the demographic dataset that contains the features (predictors) of the models. For this, we read in multiple CBS datasets, process their data, and integrate them into the main dataset.
 
 Since the surveys the we are working with contain data at the individual (timeuse) and household (expenditure) level, we create two versions of the same demographic dataset - one at each level of the data.
 
-### Process Survey Data
+### 2. Process Survey Data
 
 Second, we process the surveys that we aim to predict. Of course, this processing is highly survey specific. The resulting datasets only contain an id variable and the survey variables to be predicted. 
 
@@ -33,13 +42,13 @@ For the **time-use survey**, we have aggregated all primary and secondary activi
 
 For the **expenditure survey**, we have aggregated all household expenditures to a higher (i.e. less detailed) level. Specifically, the dataset now contains variables indicating how much money each household spent on 156 categories (e.g. 'meat', 'vegetables', 'clothes', 'gasoline', 'furniture', ...).
 
-### Train & Test Models
+### 3. Train & Test Models
 
 Third, we train, test, and fit the machine learning model to each survey. Specifically, we first train a model to 80% of the survey data (for each survey). Then, we evaluate the prediction quality on the remaining 20% of the data (of each survey). This process can be performed for different kinds of models, such as a baseline model and a machine learning model, to compare the prediction qualities with each other. Eventually, this process will also entail hyperparameter tuning (currently under development).
 
 Lastly, we fit the model to the whole survey dataset. The resulting model will be used for the survey predictions in the next step.
 
-### Predict at the Population Level
+###  4. Predict at the Population Level
 
 Fourth, we use the fitted model that was created in the last step to predict survey data at the population level. The result is a dataset that contains an id variable together with the predicted variables for the respective survey.
 
@@ -47,6 +56,7 @@ Fourth, we use the fitted model that was created in the last step to predict sur
 
 
 ## Contact
+
 This is a project by the [ODISSEI Social Data Science team](https://odissei-soda.nl/). Do you have any questions or suggestions? Please contact [Maike Weiper](https://github.com/MWeiper).
 
 <img src="https://odissei-soda.nl/images/logos/soda_logo.svg" alt="SoDa logo" width="250px"/> 
