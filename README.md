@@ -19,6 +19,11 @@ In the context of climate sociology, we use household expenditure and individual
 5. Integrate population-level surveys with each other
 
 
+### Setup
+
+This code is designed to run on CBS. Therefore no datafiles are available on github. The package requirements can be found in requirements.txt. You can read more about creating a python environment on the CBS Microdata environment [here](https://github.com/sodascience/cbs_python/).
+
+
 ### Overview of Main Scripts
 
 | Script                        | Description                           | Outcome                                                                                       |
