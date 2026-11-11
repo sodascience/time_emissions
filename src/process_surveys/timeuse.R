@@ -10,23 +10,12 @@ getwd()
 
 # df_co2 <- read.csv("F:/Documents/Data/carbonEmissions.csv", row.names = 1)
 df_time <- read.spss("G:/VrijetijdCultuur/TBO/2016/TBO2016V2.sav", to.data.frame = TRUE, use.value.labels = FALSE)
-# df_time_meta <- read_excel("F:/Documents/Data/TBO_meta.xlsx", "activities_unique")
-# df_time_meta_loc <- read_excel("F:/Documents/Data/TBO_meta.xlsx", "locations")
 
-# df_mapping_intercept <- read_excel("F:/Documents/Data/mapping_budget-TBO.xlsx", "mapping_intercept")
-# df_mapping_intercept <- df_mapping_intercept[-1, -2] # remove descriptions of time and budget variables
 
-# df_mapping_home <- read_excel("F:/Documents/Data/mapping_budget-TBO.xlsx", "mapping_home")
-# df_mapping_home <- df_mapping_home[-1, -2] # remove descriptions of time and budget variables
-# 
-# df_mapping_out <- read_excel("F:/Documents/Data/mapping_budget-TBO.xlsx", "mapping_out")
-# df_mapping_out <- df_mapping_out[-1, -2] # remove descriptions of time and budget variables
-# 
-# df_mapping_transport <- read_excel("F:/Documents/Data/mapping_budget-TBO.xlsx", "mapping_transport")
-# df_mapping_transport <- df_mapping_transport[-1, -2] # remove descriptions of time and budget variables
-# 
-# df_mapping <- merge(df_mapping_home, df_mapping_out)
-# df_mapping <- merge(df_mapping, df_mapping_transport)
+
+
+# filter for participants who filled in all 7 days of the dagboek
+df_time <- df_time %>% subset(resultaat_tbo_7dagen == "2" | resultaat_tbo_7dagen == "6")
 
 
 
@@ -39,9 +28,9 @@ location_cols <- names(df_time)[which(grepl("hl[0-9+]", names(df_time)))]
 
 
 # create dfs from primary and secondary activities
-df_time_primary <- df_time[c("RINPERSOON", primary_cols)] # select all primary activities
-df_time_secondary <- df_time[c("RINPERSOON", secondary_cols)] # select all secondary activities
-df_time_location <-  df_time[c("RINPERSOON", location_cols)] # select all locations
+df_time_primary <- df_time[c("RINPERSOON", "RINPERSOONS", primary_cols)] # select all primary activities
+df_time_secondary <- df_time[c("RINPERSOON", "RINPERSOONS", secondary_cols)] # select all secondary activities
+df_time_location <-  df_time[c("RINPERSOON", "RINPERSOONS", location_cols)] # select all locations
 
 
 
@@ -64,7 +53,7 @@ df_time_secondary[secondary_cols] <- lapply(df_time_secondary[secondary_cols], f
 
 df_time_transport <- df_time_location %>% mutate(across(-1, ~ ifelse(.>=20, paste0("_", .), "")))
 
-for(col in 2:ncol(df_time_primary)){ # loop through cols
+for(col in 3:ncol(df_time_primary)){ # loop through cols
   primary_col <- df_time_primary[col]
   transport_col <- df_time_transport[col]
   
@@ -90,8 +79,8 @@ df_time_secondary <- as.data.frame(lapply(df_time_secondary, as.character)) # tu
 
 
 # get names of all activities
-activities_primary <- sort(unique(unlist(df_time_primary[2:ncol(df_time_primary)])))
-activities_secondary <- sort(unique(unlist(df_time_secondary[2:ncol(df_time_secondary)])))
+activities_primary <- sort(unique(unlist(df_time_primary[3:ncol(df_time_primary)])))
+activities_secondary <- sort(unique(unlist(df_time_secondary[3:ncol(df_time_secondary)])))
 
 all_activities <- sort(unique(c(activities_primary, activities_secondary)))
 
@@ -102,9 +91,12 @@ all_activities <- sort(unique(c(activities_primary, activities_secondary)))
 
 
 # make new df_activities to aggregate number of hours spent on each activity
-df_activities <- as.data.frame(matrix(nrow = 2260, ncol = 1))
-names(df_activities) <- "RINPERSOON"
+df_activities <- as.data.frame(matrix(nrow = nrow(df_time), ncol = 2))
+names(df_activities) <- c("RINPERSOON", "RINPERSOONS")
 df_activities$RINPERSOON <- df_time$RINPERSOON
+df_activities$RINPERSOONS <- df_time$RINPERSOONS
+df_activities$invul_datum <- df_time$invul_datum
+df_activities$tbo_eindgewicht_7dagen <- df_time$tbo_eindgewicht_7dagen
 
 
 
@@ -614,30 +606,27 @@ df_activities$home <- rowSums(df_time_location == "11", na.rm = TRUE) # sum up n
 
 # sort according to variable names
 df_activities <- df_activities %>%
-  select(RINPERSOON, sort(names(df_activities)[2:ncol(df_activities)]))
+  select(RINPERSOON, RINPERSOONS, invul_datum, tbo_eindgewicht_7dagen, sort(names(df_activities)[5:ncol(df_activities)]))
 
 
-# now df_activities contains 115 variables
+# now df_activities contains 118 variables (114 activities)
 
-# turn units (10 minutes) into hours per week
-df_hours <- round(((df_activities[2:ncol(df_activities)] * 10)/60), 2)
-df_activities[2:ncol(df_activities)] <- df_hours
+# turn units (10 minutes) into hours per day
+df_hours <- round((((df_activities[5:ncol(df_activities)] * 10)/60)/7), 2)
+df_activities[5:ncol(df_activities)] <- df_hours
 
-colnames(df_activities)[2:ncol(df_activities)] <- paste("activity", colnames(df_activities)[2:ncol(df_activities)], sep = "_")
+colnames(df_activities)[5:ncol(df_activities)] <- paste("activity", colnames(df_activities)[5:ncol(df_activities)], sep = "_")
 
 
 
-# add enq datum to df
-df_tbo <- read.spss("G:/VrijetijdCultuur/TBO/2016/TBO2016V2.sav", to.data.frame = TRUE)
-df_activities <- merge(df_tbo %>% select(enq_datum, RINPERSOON), df_activities, by = 'RINPERSOON', all.y = TRUE)
 
-df_activities$enq_datum <- str_pad(as.character(df_activities$enq_datum), width = 8, side = "left", pad = 0)
+
+
+# turn RINPERSOON into a numeric feature for faster processing
+df_activities$RINPERSOON <- as.numeric(df_activities$RINPERSOON)
+df_activities$invul_datum <- as.Date(df_activities$invul_datum, format = "%d%m%Y")
 
 
 
 # save as csv
-write.csv(df_activities, "F:/Documents/Data/TBO_aggregated.csv", row.names = FALSE)
-write_parquet(df_activities, "F:/Documents/Data/TBO_aggregated.parquet")
-write_parquet(df_activities, "F:/Documents/time_emissions/processed_data/true/timeuse.parquet")
-
-
+write_parquet(df_activities, "H:/Maike/processed_data/surveys/TIMEUSE/responses/responses.parquet")

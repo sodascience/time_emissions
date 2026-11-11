@@ -3,7 +3,7 @@ library(data.table)
 library(tidyverse)
 library(nanoparquet)
 
-budget_df <- read.spss("G:/InkomenBestedingen/BUDGETONDERZOEK/2015/BUDGETONDERZOEK2015V4.sav", to.data.frame = TRUE)
+budget_df <- read.spss("G:/InkomenBestedingen/BUDGETONDERZOEK/2015/BUDGETONDERZOEK2015V4.sav", to.data.frame = TRUE, use.value.labels = FALSE)
 var_labels <- data.frame(var = names(budget_df), label =  attr(budget_df, "variable.labels"))
 
 
@@ -679,7 +679,7 @@ for(name in exp_variables){
 }
 
 
-# There are no households in which the sum of the subcategories does not match the total expenditure of the category BOBEST100000H
+# [1] "There are 0 households in which the sum of the subcategories does not match the total expenditure of the category BOBEST100000H"
 # So, we should remove BOBEST100000H - Onderwijs
 
 budget_df <- budget_df %>% select(- BOBEST100000H)
@@ -714,9 +714,10 @@ print(output)
 
 budget_df <- budget_df %>% select(- c(BOBEST000000H, BOBESTKINDEROPVANG))
 
-# round expenditure variables to 4 digits 
+# divide yearly expenditures by 365 to obtain daily expenditures and round expenditure variables to 4 digits
 for(var in 1:ncol(budget_df)){
   if(is.numeric(budget_df[, var]) & grepl('BOBEST', names(budget_df)[var])){
+    budget_df[, var] <- budget_df[, var] / 365
     budget_df[, var] <- round(budget_df[, var], 4)
   }
   else{
@@ -724,25 +725,12 @@ for(var in 1:ncol(budget_df)){
   }
 }
 
+
+# turn RINPERSOON into a numeric feature for faster processing
+budget_df$RINPERSOON <- as.numeric(budget_df$RINPERSOON)
+
+
+
 ##### SAVE #####
 
-write.csv(budget_df, "F:/Documents/Data/budget_df.csv", row.names = F)
-write_parquet(budget_df, "F:/Documents/Data/budget_df.parquet")
-
-
-budget_df <- budget_df %>%
-    select(RINPERSOON,
-           matches("^BOBEST[0-9]+")) %>%      # only select columns to predict
-    mutate(across(where(is.numeric), ~ ifelse(is.na(.), 0, .)))       # impute 0 for null values
-
-# add HUISHOUDNR to budget_df
-df_hh <- read_csv("G:/Bevolking/GBAHUISHOUDENSBUS/GBAHUISHOUDENS2015BUSV1.csv") %>%
-    select(RINPERSOON, HUISHOUDNR)
-  
-budget_df <- budget_df %>%
-    left_join(df_hh, by = "RINPERSOON") %>%
-    distinct(RINPERSOON, .keep_all = TRUE) %>%
-    select(-RINPERSOON)
-
-write_parquet(budget_df, "F:/Documents/time_emissions/processed_data/true/expenditures.parquet")
-
+write_parquet(budget_df, "H:/Maike/processed_data/surveys/EXPENDITURES/responses/responses.parquet")
