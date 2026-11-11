@@ -1,0 +1,201 @@
+,Footprint
+"('Paddy rice',)",11445.561568168076
+"('Wheat',)",412593792.3113889
+"('Cereal grains nec',)",726943424.217773
+"('Vegetables, fruit, nuts',)",1599617422.8455453
+"('Oil seeds',)",33416560.776465766
+"('Sugar cane, sugar beet',)",0.0
+"('Plant-based fibers',)",28979591.395504326
+"('Crops nec',)",1348159290.5700202
+"('Cattle',)",0.0
+"('Pigs',)",0.0
+"('Poultry',)",1408011129.3660598
+"('Meat animals nec',)",0.0
+"('Animal products nec',)",0.0
+"('Raw milk',)",0.0
+"('Wool, silk-worm cocoons',)",0.0
+"('Manure (conventional treatment)',)",0.0
+"('Manure (biogas treatment)',)",0.0
+"('Products of forestry, logging and related services (02)',)",1138583.841879242
+"('Fish and other fishing products; services incidental of fishing (05)',)",150754775.32788092
+"('Anthracite',)",3641362.011591151
+"('Coking Coal',)",0.0
+"('Other Bituminous Coal',)",0.0
+"('Sub-Bituminous Coal',)",0.0
+"('Patent Fuel',)",0.0
+"('Lignite/Brown Coal',)",0.0
+"('BKB/Peat Briquettes',)",0.4515096016765772
+"('Peat',)",0.0
+"('Crude petroleum and services related to crude oil extraction, excluding surveying',)",0.0
+"('Natural gas and services related to natural gas extraction, excluding surveying',)",0.0
+"('Natural Gas Liquids',)",0.0
+"('Other Hydrocarbons',)",0.0
+"('Uranium and thorium ores (12)',)",0.0
+"('Iron ores',)",0.0
+"('Copper ores and concentrates',)",0.0
+"('Nickel ores and concentrates',)",0.0
+"('Aluminium ores and concentrates',)",0.0
+"('Precious metal ores and concentrates',)",0.0
+"('Lead, zinc and tin ores and concentrates',)",0.0
+"('Other non-ferrous metal ores and concentrates',)",0.0
+"('Stone',)",0.0
+"('Sand and clay',)",0.0
+"('Chemical and fertilizer minerals, salt and other mining and quarrying products n.e.c.',)",44909602.423313275
+"('Products of meat cattle',)",3396602851.5900345
+"('Products of meat pigs',)",0.0
+"('Products of meat poultry',)",658728973.6141001
+"('Meat products nec',)",1760578914.3243842
+"('products of Vegetable oils and fats',)",43688147.85277119
+"('Dairy products',)",1231508871.6658766
+"('Processed rice',)",159280794.10931522
+"('Sugar',)",106166625.59039862
+"('Food products nec',)",12172291911.67586
+"('Beverages',)",646886197.374207
+"('Fish products',)",511191155.663082
+"('Tobacco products (16)',)",882690258.7730823
+"('Textiles (17)',)",2388571418.4125996
+"('Wearing apparel; furs (18)',)",2679778173.2789907
+"('Leather and leather products (19)',)",782921763.0771085
+"('Wood and products of wood and cork (except furniture); articles of straw and plaiting materials (20)',)",81070591.71455719
+"('Wood material for treatment, Re-processing of secondary wood material into new wood material',)",0.0
+"('Pulp',)",0.0
+"('Secondary paper for treatment, Re-processing of secondary paper into new pulp',)",0.0
+"('Paper and paper products',)",0.0
+"('Printed matter and recorded media (22)',)",1137049210.7953968
+"('Coke Oven Coke',)",0.0
+"('Gas Coke',)",0.0
+"('Coal Tar',)",0.0
+"('Motor Gasoline',)",11466074561.14167
+"('Aviation Gasoline',)",970691.2247119286
+"('Gasoline Type Jet Fuel',)",0.0
+"('Kerosene Type Jet Fuel',)",69698759.38158293
+"('Kerosene',)",868502255.2782753
+"('Gas/Diesel Oil',)",5001179951.658427
+"('Heavy Fuel Oil',)",0.0
+"('Refinery Gas',)",0.0
+"('Liquefied Petroleum Gases (LPG)',)",558070659.696782
+"('Refinery Feedstocks',)",0.0
+"('Ethane',)",0.0
+"('Naphtha',)",0.0
+"('White Spirit & SBP',)",0.0
+"('Lubricants',)",0.0
+"('Bitumen',)",0.0
+"('Paraffin Waxes',)",0.0
+"('Petroleum Coke',)",0.0
+"('Non-specified Petroleum Products',)",0.0
+"('Nuclear fuel',)",0.0
+"('Plastics, basic',)",0.0
+"('Secondary plastic for treatment, Re-processing of secondary plastic into new plastic',)",0.0
+"('N-fertiliser',)",15693259.048987733
+"('P- and other fertiliser',)",35768751.30742237
+"('Chemicals nec',)",0.0
+"('Charcoal',)",27175153.118642524
+"('Additives/Blending Components',)",0.0
+"('Biogasoline',)",52304936.32488096
+"('Biodiesels',)",101680299.18147175
+"('Other Liquid Biofuels',)",0.0
+"('Rubber and plastic products (25)',)",458703675.2335401
+"('Glass and glass products',)",0.0
+"('Secondary glass for treatment, Re-processing of secondary glass into new glass',)",0.0
+"('Ceramic goods',)",0.0
+"('Bricks, tiles and construction products, in baked clay',)",966725.4269906951
+"('Cement, lime and plaster',)",15810271.719115585
+"('Ash for treatment, Re-processing of ash into clinker',)",0.0
+"('Other non-metallic mineral products',)",5984546.990150496
+"('Basic iron and steel and of ferro-alloys and first products thereof',)",0.0
+"('Secondary steel for treatment, Re-processing of secondary steel into new steel',)",0.0
+"('Precious metals',)",3571.4772299946035
+"('Secondary preciuos metals for treatment, Re-processing of secondary preciuos metals into new preciuos metals',)",0.0
+"('Aluminium and aluminium products',)",2738.94173724234
+"('Secondary aluminium for treatment, Re-processing of secondary aluminium into new aluminium',)",0.0
+"('Lead, zinc and tin and products thereof',)",0.0
+"('Secondary lead for treatment, Re-processing of secondary lead into new lead',)",0.0
+"('Copper products',)",0.0
+"('Secondary copper for treatment, Re-processing of secondary copper into new copper',)",0.0
+"('Other non-ferrous metal products',)",2502.022078981948
+"('Secondary other non-ferrous metals for treatment, Re-processing of secondary other non-ferrous metals into new other non-ferrous metals',)",0.0
+"('Foundry work services',)",421.3714295335638
+"('Fabricated metal products, except machinery and equipment (28)',)",776020709.347829
+"('Machinery and equipment n.e.c. (29)',)",51414832.773431815
+"('Office machinery and computers (30)',)",14318621.128368953
+"('Electrical machinery and apparatus n.e.c. (31)',)",787001347.046204
+"('Radio, television and communication equipment and apparatus (32)',)",2644605539.1605377
+"('Medical, precision and optical instruments, watches and clocks (33)',)",1037523958.2434845
+"('Motor vehicles, trailers and semi-trailers (34)',)",553271842.6280442
+"('Other transport equipment (35)',)",406965034.8099744
+"('Furniture; other manufactured goods n.e.c. (36)',)",1969743944.1615996
+"('Secondary raw materials',)",0.0
+"('Bottles for treatment, Recycling of bottles by direct reuse',)",0.0
+"('Electricity by coal',)",7599027063.580891
+"('Electricity by gas',)",5157410417.203075
+"('Electricity by nuclear',)",78037213.04918769
+"('Electricity by hydro',)",1130143.349002941
+"('Electricity by wind',)",511.0003530350633
+"('Electricity by petroleum and other oil derivatives',)",43455509.08301783
+"('Electricity by biomass and waste',)",268456440.169949
+"('Electricity by solar photovoltaic',)",6202922.9058255935
+"('Electricity by solar thermal',)",0.0
+"('Electricity by tide, wave, ocean',)",0.0
+"('Electricity by Geothermal',)",0.0
+"('Electricity nec',)",50710429.53527592
+"('Transmission services of electricity',)",792233667.2628354
+"('Distribution and trade services of electricity',)",2797588575.9575257
+"('Coke oven gas',)",0.0
+"('Blast Furnace Gas',)",0.0
+"('Oxygen Steel Furnace Gas',)",0.0
+"('Gas Works Gas',)",0.0
+"('Biogas',)",0.19681387498175684
+"('Distribution services of gaseous fuels through mains',)",0.0
+"('Steam and hot water supply services',)",8575517.237102764
+"('Collected and purified water, distribution services of water (41)',)",1219427850.9258795
+"('Construction work (45)',)",3480731.7656073133
+"('Secondary construction material for treatment, Re-processing of secondary construction material into aggregates',)",0.0
+"('Sale, maintenance, repair of motor vehicles, motor vehicles parts, motorcycles, motor cycles parts and accessoiries',)",2494821809.708444
+"('Retail trade services of motor fuel',)",24458937.436004948
+"('Wholesale trade and commission trade services, except of motor vehicles and motorcycles (51)',)",322189592.21396947
+"('Retail  trade services, except of motor vehicles and motorcycles; repair services of personal and household goods (52)',)",107853067.50651269
+"('Hotel and restaurant services (55)',)",2478087316.6199327
+"('Railway transportation services',)",911316126.7294245
+"('Other land transportation services',)",4116236120.845208
+"('Transportation services via pipelines',)",14858234.736576594
+"('Sea and coastal water transportation services',)",900210355.4669397
+"('Inland water transportation services',)",979190386.5940143
+"('Air transport services (62)',)",5905761374.246988
+"('Supporting and auxiliary transport services; travel agency services (63)',)",2401667118.61143
+"('Post and telecommunication services (64)',)",2034720207.7414908
+"('Financial intermediation services, except insurance and pension funding services (65)',)",0.0
+"('Insurance and pension funding services, except compulsory social security services (66)',)",1323261889.7624037
+"('Services auxiliary to financial intermediation (67)',)",94307883.88170111
+"('Real estate services (70)',)",5814255777.510492
+"('Renting services of machinery and equipment without operator and of personal and household goods (71)',)",232656161.04467034
+"('Computer and related services (72)',)",6203647.964958844
+"('Research and development services (73)',)",0.0
+"('Other business services (74)',)",1853076317.6487799
+"('Public administration and defence services; compulsory social security services (75)',)",304665494.093216
+"('Education services (80)',)",421402679.79641455
+"('Health and social work services (85)',)",8295903.164521206
+"('Food waste for treatment: incineration',)",90388311.58980104
+"('Paper waste for treatment: incineration',)",95996319.96565755
+"('Plastic waste for treatment: incineration',)",205483607.49311942
+"('Intert/metal waste for treatment: incineration',)",277884358.3919175
+"('Textiles waste for treatment: incineration',)",95523066.36859445
+"('Wood waste for treatment: incineration',)",28302119.160937525
+"('Oil/hazardous waste for treatment: incineration',)",59523148.57061711
+"('Food waste for treatment: biogasification and land application',)",9707160.233726954
+"('Paper waste for treatment: biogasification and land application',)",1471969.6634033548
+"('Sewage sludge for treatment: biogasification and land application',)",39283362.9613466
+"('Food waste for treatment: composting and land application',)",374877707.0964597
+"('Paper and wood waste for treatment: composting and land application',)",0.0
+"('Food waste for treatment: waste water treatment',)",59790344.22485759
+"('Other waste for treatment: waste water treatment',)",131981656.32189426
+"('Food waste for treatment: landfill',)",413671386.27102965
+"('Paper for treatment: landfill',)",52704713.27426235
+"('Plastic waste for treatment: landfill',)",21176965.52616093
+"('Inert/metal/hazardous waste for treatment: landfill',)",58521864.40777197
+"('Textiles waste for treatment: landfill',)",10764894.202852143
+"('Wood waste for treatment: landfill',)",28139228.784772888
+"('Membership organisation services n.e.c. (91)',)",88853.88611269338
+"('Recreational, cultural and sporting services (92)',)",778473186.5610005
+"('Other services (93)',)",17859198.51317133
+"('Private households with employed persons (95)',)",849157859.5269184
+"('Extra-territorial organizations and bodies',)",0.0

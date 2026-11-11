@@ -1,0 +1,156 @@
+﻿COICOP1999;CBS_detailed;CBS_detailedDescription;MATCHES_COICOP2018
+01.1.1;BOBEST011100H;Brood en granen;01.1.1, 01.1.7, 01.1.9, 01.3.0
+01.1.1.7;BOBEST011170H;Ontbijtgranen;01.1.1, 01.1.7, 01.1.9, 01.3.0
+01.1.2;BOBEST011200H;Vlees;01.1.2
+01.1.2.1;BOBEST011210H;Rund- en kalfsvlees;01.1.2
+01.1.2.2;BOBEST011220H;Varkensvlees;01.1.2
+01.1.2.3;BOBEST011240H;Pluimveevlees;01.1.2
+01.1.3;BOBEST011300H;Vis en schaal- en schelpdieren;01.1.3
+01.1.4;BOBEST011400H;Melk, kaas en eieren;01.1.4
+01.1.4.1;BOBEST011410H;Verse volle melk;01.1.4
+01.1.4.2;BOBEST011420H;Verse halfvolle en magere melk;01.1.4
+01.1.4.3;BOBEST011430H;Houdbare melk;01.1.4
+01.1.5;BOBEST011500H;Oliën en vetten;01.1.5, 01.1.8, 01.3.0
+01.1.6;BOBEST011600H;Fruit;01.1.6
+01.1.7;BOBEST011700H;Groenten;01.1.7, 01.1.9
+01.1.8;BOBEST011800H;Suiker, zoetwaren en ijs;01.1.8
+01.1.9;BOBEST011900H;Voedingsmiddelen niet elders genoemd;01.1.9
+01.2.1.1;BOBEST012110H;Koffie;01.2.2
+01.2.1.2;BOBEST012120H;Thee;01.2.3
+01.2.1.3;BOBEST012130H;Cacao en chocolade in poedervorm;01.2.4
+01.2.2.1;BOBEST012210H;Mineraalwater of bronwater;01.2.5
+01.2.2.2;BOBEST012220H;Frisdranken;01.2.6
+01.2.2.3;BOBEST012230H;Vruchten- en groentesappen;01.2.1
+02.1.1;BOBEST021100H;Gedistilleerde dranken;02.1.1, 02.1.9, 02.2.1
+02.1.2;BOBEST021200H;Wijn;02.1.2, 02.2.1
+02.1.3;BOBEST021300H;Bier;02.1.3, 02.1.9, 02.2.1
+02.2.0;BOBEST022000H;Tabak;02.3, 02.3.0
+02.3;BOBEST023000H;Verdovende middelen;02.4, 02.4.0
+03.1.1;BOBEST031100H;Kledingstoffen;03.1.1
+03.1.2;BOBEST031200H;Kleding;03.1.2
+03.1.3;BOBEST031300H;Overige kledingartikelen en toebehoren;03.1.3
+03.1.4;BOBEST031400H;Stomen en reparatie van kleding;03.1.4
+03.2.1;BOBEST032100H;Schoenen en ander schoeisel;03.2.1
+03.2.2;BOBEST032200H;Reparatie en verhuur van schoenen;03.2.2
+04.1.0;BOBEST041100H;Werkelijke woninghuur betaald door huurders;04.1.1
+04.1.2;BOBEST041200H;Overige werkelijke woninghuur;04.1.2
+04.2.1;BOBEST042100H;Toegerekende huur eigen woning;04.2.1
+04.2.2;BOBEST042200H;Overige toegerekende huur;04.2.2
+04.3.1;BOBEST043100H;Onderhoudsmaterialen voor de woning;04.3.1
+04.3.2;BOBEST043200H;Onderhoudsdiensten voor de woning;04.3.2
+04.4.1;BOBEST044100H;Watervoorziening;04.4.1
+04.4.2;BOBEST044200H;Ophalen van huisvuil;04.4.2
+04.4.3;BOBEST044300H;Riolering;04.4.3
+04.4.4;BOBEST044400H;Overige kosten van woningvoorziening;04.3.2, 04.4.4
+04.5.1;BOBEST045100H;Elektriciteit;04.5.1
+04.5.2;BOBEST045200H;Gas;04.5.2
+04.5.3;BOBEST045300H;Vloeibare brandstoffen;04.5.2, 04.5.3
+04.5.4;BOBEST045400H;Vaste brandstoffen;04.5.4
+05.1;BOBEST051000H;Meubelen, stoffering en decoratie;04, 05
+05.1.2;BOBEST051200H;Vloerbedekking;04.3.1, 05.1.1
+05.1.2.3;BOBEST051230H;Diensten voor het leggen van vloerbedekking;04.3.2
+05.1.3;BOBEST051300H;Reparatie van meubelen en dergelijke;04.3.2, 05.1.2
+05.2.0;BOBEST052000H;Huishoudtextiel;05.2.1
+05.2.0.4;BOBEST052040H;Reparatie van huishoudtextiel;05.2.2
+05.3.1;BOBEST053100H;Grote huishoudelijke apparaten;05.3.1
+05.3.2;BOBEST053200H;Kleine elektrische huishoudelijke apparaten;05.3.2
+05.3.3;BOBEST053300H;Reparatie van huishoudelijke apparaten;05.3.3
+05.4;BOBEST054000H;Glas, servies en huishoudelijke artikelen;05.4, 05.4.0
+05.5.1;BOBEST055100H;Grote gereedschappen;05.5.1, 05.5.3
+05.5.2;BOBEST055200H;Kleine gereedschappen;04.3.1, 05.5.2
+05.5.2.3;BOBEST055230H;Reparatie van kleine handgereedschappen en toebehoren;05.5.3
+05.6.1;BOBEST056100H;Niet-duurzame huishoudproducten;04.3, 05.1, 05.2, 05.6
+05.6.2;BOBEST056200H;Huishoudelijke diensten;05.2.2, 05.6.2
+05.6.2.3;BOBEST056230H;Huur van meubelen en stoffering;05.1.2
+06.1.1;BOBEST061100H;Farmaceutische producten;06.1.1
+06.1.2;BOBEST061200H;Overige medische producten;06.1.2
+06.1.3;BOBEST061300H;Therapeutische apparaten;06.1.3, 06.2.2, 06.3.1
+06.1.3.3;BOBEST061330H;Reparatie van therapeutische apparaten;06.1.4
+06.2.1;BOBEST062100H;Diensten van artsen en paramedici;06.2.1, 06.2.2, 06.2.3
+06.2.2;BOBEST062200H;Diensten van tandartsen;06.2.2, 06.3.1
+06.2.3;BOBEST062300H;Diensten van paramedici;06.2.1, 06.2.3, 06.4.2
+06.2.3.1;BOBEST062310H;Diensten van medische-analyselaboratoria en doorlichtingscentra;06.4.1
+06.3;BOBEST063000H;Diensten van ziekenhuizen;06.2.1, 06.2.3, 06.3.1, 06.3.2, 06.4.1, 06.4.2
+07.1.1;BOBEST071100H;Auto's;07.1.1
+07.1.2;BOBEST071200H;Motoren, brom- en elektrische fietsen;07.1.2, 07.1.3
+07.1.3;BOBEST071300H;Fietsen;07.1.3
+07.1.4;BOBEST071400H;Door dieren getrokken voertuigen;07.1.4
+07.2.1;BOBEST072100H;Benodigdheden privé-voertuigen;07.2.1
+07.2.2;BOBEST072200H;Brandstoffen en smeermiddelen;07.2.2
+07.2.3;BOBEST072300H;Onderhoud en reparatie privé-voertuigen;07.2.3
+07.2.4;BOBEST072400H;Overige diensten privé-voertuigen;07.2.4
+07.3.1;BOBEST073100H;Personenvervoer per spoor;07.3.1
+07.3.2;BOBEST073200H;Personenvervoer over de weg;07.3.2
+07.3.3;BOBEST073300H;Personenvervoer door de lucht;07.3.3
+07.3.4;BOBEST073400H;Personenvervoer over water;07.3.4
+07.3.5;BOBEST073500H;Gecombineerd personenvervoer;07.3.5
+07.3.6;BOBEST073600H;Overige aankopen van vervoersdiensten;07.3.6, 07.4.9
+08.1.0;BOBEST081000H;Post- en pakketdiensten;07.4.1
+08.2.0.1;BOBEST082010H;Vaste telefoontoestellen;08.1.1
+08.2.0.2;BOBEST082020H;Mobiele telefoons;08.1.2
+08.2.0.3;BOBEST082030H;Overige telefoonapparatuur;08.1.3
+08.3.0.1;BOBEST083010H;Vaste telefoondiensten;08.3.1
+08.3.0.2;BOBEST083020H;Mobiele telefoondiensten;08.3.2
+08.3.0.3;BOBEST083030H;Verlenen van toegang tot internet;08.3.3
+08.3.0.4;BOBEST083040H;Gebundelde communicatiediensten;08.3.4
+08.3.0.5;BOBEST083050H;Overige diensten voor de transmissie van informatie;08.3.9
+09.1.1;BOBEST091100H;TV, audio- en video-apparatuur;08.1.4, 08.1.9
+09.1.2;BOBEST091200H;Foto-, film- en optische apparatuur;09.1.1
+09.1.3;BOBEST091300H;Gegevensverwerkende apparatuur;08.1.3, 08.1.9
+09.1.3.3;BOBEST091330H;Software;08.2.0
+09.1.4;BOBEST091400H;(On)bespeelde informatiedragers;09.7.1
+09.1.4.1;BOBEST091410H;Voorbespeelde informatiedragers;09.5.2
+09.1.4.2;BOBEST091420H;Onbespeelde informatiedragers;08.1.5
+09.1.5;BOBEST091500H;Reparatie van audio apparaten en dergelijke;08.3.5, 09.4.1
+09.2.1;BOBEST092100H;Goederen voor outdoor-recreatie;09.1.2, 09.4.2
+09.2.2;BOBEST092200H;Goederen voor indoor-recreatie;09.1.2
+09.2.2.1;BOBEST092210H;Muziekinstrumenten;09.5.1
+09.2.3;BOBEST092300H;Onderhoud grote duurzame goederen;09.4.2, 09.4.4, 09.4.5
+09.3.1;BOBEST093100H;Spellen, speelgoed en hobby's;09.2.1, 09.4.3, 13.2.2
+09.3.2;BOBEST093200H;Sport- en kampeerartikelen;09.1.2, 09.2.2
+09.3.2.3;BOBEST093230H;Reparatie van sport- en kampeerartikelen;09.4.4
+09.3.3;BOBEST093300H;Tuinen, planten en bloemen;09.3.1
+09.3.4;BOBEST093400H;(Producten voor) huisdieren;09.3.2
+09.3.5;BOBEST093500H;Diensten voor huisdieren;09.4.5
+09.4.1;BOBEST094100H;Diensten voor recreatie en sport;09.4.3, 09.4.4, 09.4.6
+09.4.2;BOBEST094200H;Culturele diensten;08.3.4, 08.3.9, 09.6.9
+09.4.2.1;BOBEST094210H;Bioscopen, theaters en concerten;09.6.1
+09.4.2.2;BOBEST094220H;Musea, bibliotheken, dierentuinen;09.6.2
+09.4.2.5;BOBEST094250H;Fotografische diensten;09.6.3
+09.4.3;BOBEST094300H;Kansspelen;09.4.7
+09.5.1;BOBEST095100H;Boeken;09.7.1
+09.5.2;BOBEST095200H;Kranten en tijdschriften;09.7.2
+09.5.3;BOBEST095300H;Divers drukwerk;09.7.3
+09.5.4;BOBEST095400H;Schrijfwaren en tekenartikelen;08.1.3, 09.7.4
+09.6.0;BOBEST096000H;Pakketreizen;09.8.0
+10.1.0;BOBEST101000H;Kleuter- en primair onderwijs;10.1.0
+10.2;BOBEST102000H;Secundair onderwijs;10.2, 10.2.0
+10.3;BOBEST103000H;Postsecundair niet-tertiair onderwijs;10.3, 10.3.0
+10.4;BOBEST104000H;Tertiair onderwijs;10.4, 10.4.0
+10.5;BOBEST105000H;Ander onderwijs;10.5, 10.5.0
+11.1.1;BOBEST111100H;Restaurants, cafés en dergelijke;11.1.1
+11.1.2;BOBEST111200H;Kantines;11.1.2
+11.2.0;BOBEST112000H;Accommodaties;11.2.0
+12.1.1;BOBEST121100H;Kappers en schoonheidssalons;13.1.3
+12.1.2;BOBEST121200H;Elektrische toestellen voor lichaamsverzorging en reparatie;13.1.1
+12.1.3;BOBEST121300H;Overige producten voor lichaamsverzorging;13.1.2
+12.2;BOBEST122000H;Prostitutie;13.9.0
+12.3.1;BOBEST123100H;Sieraden, klokken en horloges;13.2.1
+12.3.2;BOBEST123200H;Overige artikelen voor persoonlijk gebruik;07.2.1, 13.2.2, 13.2.9
+12.4.0;BOBEST124000H;Sociale bescherming;13.3.0
+12.5.2;BOBEST125200H;Verzekeringen in verband met de woning;12.1.3
+12.5.3;BOBEST125300H;Verzekeringen in verband met ziekte;12.1.2
+12.5.4;BOBEST125400H;Verzekeringen in verband met vervoer;12.1.4
+12.5.5;BOBEST125500H;Overige verzekeringen;12.1.1, 12.1.9
+12.6.1;BOBEST126100H;Indirect gemeten diensten van financiële intermediairs;12.2.1
+12.6.2;BOBEST126200H;Overige financiële diensten;12.2.2, 12.2.9
+12.7.0;BOBEST127010H;Administratieve kosten;13.9.0
+12.7.0;BOBEST127020H;Juridische diensten en accountancy;13.9.0
+12.7.0;BOBEST127030H;Diensten in verband met uitvaart;13.9.0
+12.7.0;BOBEST127040H;Overige betalingen en diensten;13.9.0
+12.7.0;BOBEST131000H;Zuiveringsheffing;13.9.0
+07.2.4;BOBEST132000H;Motorrijtuigenbelasting;07.2.4
+09.3.5;BOBEST133000H;Hondenbelasting;09.4.5
+12.7;BOBEST150010H;Eenmalige collectes en donaties;13.9
+12.7;BOBEST150020H;Periodieke donaties;13.9
+NA;BOBEST300000H;Uitgaven aan groot onderhoud;04.3.1, 04.3.2, 07.2.3, 09.4.2, 09.4.4, 09.4.5

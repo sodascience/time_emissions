@@ -1,0 +1,302 @@
+---
+title: "Compare CBS Carbon Intensities"
+output:
+  html_document:
+    df_print: paged
+---
+
+This notebook compares different methods to calculate carbon intensities for each CBS product.
+
+- **preRAS**: Divide the total CBS GHG emissions by the desired CBS column sums (total expenditures according to CBS) in different years (2014-2016)
+- **postRAS**: Divide the total CBS GHG emissions by the actual CBS column sums after performing the RAS (total expenditures according to CBS product-wisely scaled to EXIOBASE).
+
+If the carbon intensity of a product is different in one method compared to the other, it indicates that
+
+- Carbon intensity is **lower** in *postRAS* than in *preRAS*: EXIOBASE estimates higher expenditures than CBS
+- Carbon intensity is **higher** in *postRAS* than in *preRAS*: EXIOBASE estimates smaller expenditures than CBS
+
+```{r, setup, include = F}
+# R version 4.2.3 (2023-03-15 ucrt)
+
+knitr::opts_knit$set(root.dir = '..', scipen = 999)
+
+library(tidyverse)  # Version 2.0.0
+library(readxl) # Version 1.4.2
+```
+
+
+```{r readData, include = FALSE}
+# Read data
+df_preRAS_2014 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2014.xlsx", sheet = "CarbonIntensity_CBS")
+df_preRAS_2015 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2015.xlsx", sheet = "CarbonIntensity_CBS")
+df_preRAS_2016 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2016.xlsx", sheet = "CarbonIntensity_CBS")
+df_postRAS_2015 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_final.xlsx", sheet = "CarbonIntensity_CBS")
+
+
+emissions_preRAS_2014 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2014.xlsx", sheet = "CarbonEmissions_CBS")
+emissions_preRAS_2015 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2015.xlsx", sheet = "CarbonEmissions_CBS")
+emissions_preRAS_2016 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_preRAS_2016.xlsx", sheet = "CarbonEmissions_CBS")
+emissions_postRAS_2015 <- read_excel("CorrespondenceTables_CBS-EXIOBASE_final.xlsx", sheet = "CarbonEmissions_CBS")
+
+expenditures <- read_excel("CorrespondenceTables_CBS-EXIOBASE_final.xlsx", sheet = "Expenditures_CBS")
+```
+
+```{r make_df function, include = F}
+make_df <- function(regexpression, exp = 1){
+  vars <- df_postRAS_2015$Variable[which(grepl(regexpression, df_postRAS_2015$Variable))]
+  
+  new_df_intensities <- data.frame("product" = 
+                        df_postRAS_2015$Product[which(df_postRAS_2015$Variable %in% vars)],
+                      "intensity_preRAS_2014" = 
+                        df_preRAS_2014$CarbonIntensity[which(df_preRAS_2014$Variable %in% vars)] * exp, 
+                      "intensity_preRAS_2015" = 
+                        df_preRAS_2015$CarbonIntensity[which(df_preRAS_2015$Variable %in% vars)] * exp, 
+                      "intensity_preRAS_2016" = 
+                        df_preRAS_2016$CarbonIntensity[which(df_preRAS_2016$Variable %in% vars)] * exp, 
+                      "intensity_postRAS_2015" = 
+                        df_postRAS_2015$CarbonIntensity[which(df_postRAS_2015$Variable %in% vars)] * exp)
+  
+  print(summary(new_df_intensities))
+  
+
+  new_df_totalEmissions <- data.frame("product" = df_postRAS_2015$Product,
+                    "emissions_preRAS_2014" = df_preRAS_2014$CarbonIntensity * expenditures$Expenditures, 
+                    "emissions_preRAS_2015" = df_preRAS_2015$CarbonIntensity * expenditures$Expenditures, 
+                    "emissions_preRAS_2016" = df_preRAS_2016$CarbonIntensity * expenditures$Expenditures, 
+                    "emissions_postRAS_2015" = df_postRAS_2015$CarbonIntensity * expenditures$Expenditures)
+  
+  print(summary(new_df_totalEmissions))
+  
+  new_df_expenditures <- data.frame("product" = 
+                        expenditures$Product[which(expenditures$Variable %in% vars)],
+                        "expenditures" = expenditures$Expenditures[which(expenditures$Variable %in% vars)])
+  
+  print(summary(new_df_expenditures))
+  
+  new_df <- merge(new_df_intensities, new_df_totalEmissions, by = "product")
+  new_df <- merge(new_df, new_df_expenditures, by = "product")
+  
+  return(new_df)
+}
+```
+
+```{r make dataframes, include = F}
+df_all <- make_df("")
+df_all <- df_all[match(df_postRAS_2015$Product, df_all$product), ] # reorder according to the initial order
+rownames(df_all) <- NULL
+
+df_food <- make_df("BOBEST01")
+df_drinks <- make_df("BOBEST02")
+df_clothes <- make_df("BOBEST03")
+df_accomodation <- make_df("BOBEST04")
+df_household <- make_df("BOBEST05")
+df_transport <- make_df("BOBEST07")
+df_officeSupplies <- make_df("BOBEST08")
+df_freeTime <- make_df("BOBEST09")
+df_education <- make_df("BOBEST10")
+df_medical <- make_df("BOBEST06")
+df_other <- make_df("BOBEST11|BOBEST121|BOBEST122|BOBEST123")
+df_administrative <- make_df("BOBEST124|BOBEST125|BOBEST126|BOBEST127|BOBEST13|BOBEST15|BOBEST30")
+```
+
+
+```{r make_plot function, include = F}
+# Reshape the data frame to long format
+make_plot <- function(df, title, intensity_limits = NA, emissions_limits = NA, expenditure_limits = NA, save = FALSE){
+  
+  ### carbon intensities ###
+  df_long <- df %>%
+    pivot_longer(cols = c(intensity_preRAS_2014, intensity_preRAS_2015, intensity_preRAS_2016, intensity_postRAS_2015),
+                 names_to = "method",
+                 values_to = "intensity")  
+  
+  df_long$method <- factor(df_long$method, levels = c("intensity_preRAS_2016", "intensity_preRAS_2015", "intensity_preRAS_2014", "intensity_postRAS_2015"))
+  
+  # Reorder levels of product based on newMethod values
+  df_long$product <- factor(df_long$product, 
+                            levels = unique(
+                              df_long$product[which(df_long$method == "intensity_postRAS_2015")]
+                              [order(df_long$intensity[which(df_long$method == "intensity_postRAS_2015")])]))
+  
+  desired_order <- levels(df_long$product)
+  
+  plot_intensity <- ggplot(df_long, aes(x = product, y = intensity, fill = method)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(x = "Product", y = "Carbon Intensity") +
+    scale_fill_manual(values = c("darkolivegreen", "darkolivegreen4", "darkolivegreen3", "burlywood2")) +
+    guides(fill = guide_legend(reverse = T)) +
+    theme_minimal() +
+    ggtitle(title)
+    
+  if(length(intensity_limits) > 1){
+    plot_intensity <- plot_intensity + scale_y_continuous(limits = c(intensity_limits))
+  }
+  
+  plot_intensity <- plot_intensity + coord_flip()
+  
+  if(save){
+    ggsave(paste("plots/", title, "_intensity.png", sep = ""), width = 7, height = 4)
+  }
+  
+  print(plot_intensity)
+  
+  
+  
+  ### carbon emissions ###
+  df_long <- df %>%
+    pivot_longer(cols = c(emissions_preRAS_2014, emissions_preRAS_2015, emissions_preRAS_2016, emissions_postRAS_2015),
+                 names_to = "method",
+                 values_to = "emissions")  
+  
+  df_long$method <- factor(df_long$method, levels = c("emissions_preRAS_2016", "emissions_preRAS_2015", "emissions_preRAS_2014", "emissions_postRAS_2015"))
+  
+  # Reorder levels of product based on the newMethod values of carbon intensity (as above)
+  df_long$product <- factor(df_long$product, levels = desired_order)
+  
+  
+  plot_emissions <- ggplot(df_long, aes(x = product, y = emissions, fill = method)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(x = "Product", y = "Carbon Emissions") +
+    scale_fill_manual(values = c("darkolivegreen", "darkolivegreen4", "darkolivegreen3", "burlywood2")) +
+    guides(fill = guide_legend(reverse = T)) +
+    theme_minimal() +
+    ggtitle(title)
+    
+  if(length(emissions_limits) > 1){
+    plot_emissions <- plot_emissions + scale_y_continuous(limits = c(emissions_limits))
+  }
+  
+  plot_emissions <- plot_emissions + coord_flip()
+  
+  if(save){
+    ggsave(paste("plots/", title, "_emissions.png", sep = ""), width = 7, height = 4)
+  }
+  
+  print(plot_emissions)
+  
+  
+  
+  ### expenditures ###
+  
+  # Reorder levels of product based on the newMethod values of carbon intensity (as above)
+  df$product <- factor(df$product, levels = desired_order)
+  
+  plot_expenditures <- ggplot(df, aes(x = product, y = expenditures)) +
+    geom_bar(stat = "identity", fill = "darkolivegreen") + 
+    labs(x = "Product", y = "Expenditures") +
+    guides(fill = guide_legend(reverse = T)) +
+    theme_minimal() +
+    ggtitle(title)
+  
+  if(length(expenditure_limits) > 1){
+    plot_expenditures <- plot_expenditures + scale_y_continuous(limits = c(expenditure_limits))
+  }
+  
+  plot_expenditures <- plot_expenditures + coord_flip()
+  
+  print(plot_expenditures)
+  
+  if(save){
+    ggsave(paste("plots/", title, "_expenditures.png", sep = ""), width = 7, height = 4)
+  }
+}
+```
+
+\newpage
+
+## Food
+
+```{r food, echo = F}
+make_plot(df_food, "Food", save = TRUE)
+```
+
+\newpage
+
+## Drinks
+
+```{r drinks, echo=F}
+make_plot(df_drinks, "Drinks", save = TRUE)
+```
+
+## Clothes
+
+```{r clothes, echo = F}
+make_plot(df_clothes, "Clothes", save = TRUE)
+```
+
+\newpage
+
+## Accomodation
+
+```{r accomodation, echo = F}
+make_plot(df_accomodation, "Accomodation", save = TRUE)
+```
+
+\newpage
+
+## Household
+
+```{r household, echo = F}
+make_plot(df_household, "Household", save = TRUE)
+```
+
+\newpage
+
+## Transport
+
+```{r transport, echo = F}
+make_plot(df_transport, "Transport", save = TRUE)
+```
+
+\newpage
+
+## Office Supplies
+
+```{r officeSupplies, echo = F}
+make_plot(df_officeSupplies , "Office Supplies", save = TRUE)
+```
+
+
+\newpage
+
+## Free Time
+
+```{r freeTime, echo = F}
+make_plot(df_freeTime, "Free Time", save = TRUE)
+```
+
+\newpage
+
+## Education
+
+What seems to be happening here is that according to EXIOBASE, households spend less money on education than according to CBS. Therefore, the denominator in *newMethod* is smaller and thus the carbon intensity is higher.
+
+```{r education, echo = F}
+make_plot(df_education, "Education", save = TRUE)
+```
+
+\newpage
+
+## Medical
+
+```{r medical, echo = F}
+make_plot(df_medical , "Medical", save = TRUE)
+```
+
+
+\newpage
+
+## Other
+
+```{r other, echo = F}
+make_plot(df_other, "Other", save = TRUE)
+```
+
+
+\newpage
+
+## Administrative
+
+```{r admin, echo = F}
+make_plot(df_administrative, "Administrative", save = TRUE)
+```

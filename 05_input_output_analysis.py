@@ -9,5 +9,6 @@ sums = sums.unpivot(variable_name = "variable", value_name = "weighted_sum")
 sums.write_parquet(OUT / "input_output_analysis/expenditures_population_sums.parquet")
 
 
-# --- now, do the input-output analysis with the offline script ---
+
+# --- now, do the input-output analysis with the script provided under src/input_output_analysis/IO_analysis/code ---
 # the result should be a (csv) file emission_intensity_per_expenditure

@@ -1,0 +1,75 @@
+---
+title: "Compare expenditures EXIOBASE over years"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, setup, include = F}
+# R version 4.2.3 (2023-03-15 ucrt)
+
+knitr::opts_knit$set(root.dir = '..', scipen = 999)
+
+library(tidyverse)  # Version 2.0.0
+library(readxl) # Version 1.4.2
+```
+
+
+```{r readExpenditures, include = F}
+years = c(2013:2017)
+
+# read expenditure data
+df <- read.csv("data/EXIOBASE/y_NL_comparisons.csv", row.names = 1)
+
+# Preprocess row names
+rownames(df) <- gsub("[()',]", "", rownames(df))
+
+names(df) <- as.character(years)
+
+# the unit of expenditures in df is million US$. Now, I make the unit = €
+df <- df * 1000000 * 0.9015
+```
+
+
+```{r readEmissions, include = F}
+# read ghg emission data
+ghg <- read.csv("data/EXIOBASE/emissions/EXIOBASE_footprints_comparisons.csv", row.names = 1, check.names = FALSE, colClasses = numeric())
+
+# Preprocess row names
+rownames(ghg) <- gsub("[()',]", "", rownames(ghg))
+```
+
+
+```{r createPlots, warning = F, echo = F}
+# Create an empty list to store the plots
+plot_list <- list()
+
+# Iterate over each row of the dataframe
+for (i in 1:nrow(df)) {
+  # Create a dataframe for the current row
+  row_data <- data.frame(year = years, 
+                         expenditures = t(df[i, ]), 
+                         emissions = t(ghg[i, ]))
+  names(row_data) <- c("year", "expenditures", "emissions")
+  
+  # Create a line plot for the current row
+  plot <- ggplot(row_data, aes(x = year)) +
+    geom_line(aes(y = expenditures), color = "black") +
+    geom_line(aes(y = emissions), color = "darkorange3") +
+    
+    labs(title = row.names(df)[i], y = "Expenditures") +
+    scale_y_continuous(sec.axis = sec_axis(~., name = "Emissions")) +
+    theme_minimal() +
+    theme(axis.title.y.left = element_text(color = "black"), 
+          axis.title.y.right = element_text(color = "darkorange3"))
+    
+  # Store the plot in the list
+  plot_list[[length(plot_list)+1]] <- plot
+
+}
+
+# Print the plots
+for (i in 1:length(plot_list)) {
+  print(plot_list[[i]])
+}
+```
