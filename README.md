@@ -1,48 +1,61 @@
 # Time-use Imputation for Modelling Emissions (TIME)
 
-This project explores how we can leverage Dutch register data to impute survey data for individuals outside the original sample.
+This project explores how we can use machine-learning techniques to impute survey data for individuals outside the original sample based on Dutch register data. 
+This way, multiple non-overlapping samples can be imputed for the entire Dutch population and combined with each other to generate new insights.
 
-In the context of climate sociology, we use household expenditure and individual time-use data as example surveys. The resulting predictions can be combined to estimate individual and household carbon emissions at the population level.
+## Context
 
+This project is situated in the context of climate sociology.
+The goal is to understand the relationship between individual time-use and household carbon emissions.
+To achieve this, we use input-output analysis to estimate household carbon emissions based on household expenditure data. Then, we assign these household emissions to the individual household members based on their time-use.
 
+However, the samples of the time-use and expenditure surveys are non-overlapping and therefore cannot be directly linked to each other.
+This presents the case study for this project: 
+To assign the household emissions to the individual household members, we need a dataset that contains both types of information for the *same individuals*.
 
-*This repository is currently under development.*
+To create this overlapping dataset, we use machine-learning techniques to impute or predict the survey data for individuals outside the original sample based on Dutch register data (see steps 1-4 in the workflow below).
+Then, we estimate the household carbon emissions from the predicted household expenditures using input-output analysis (step 5).
+Eventually, we assign these emissions to the individual household members based on their predicted individual time-use (step 6). 
 
 
 
 ## Workflow
 
 1. Integrate and preprocess demographic data (from register datasets / CBS microdata)
-2. Preprocess and clean survey datasets (e.g., time-use or expenditure surveys)
+2. Preprocess and clean survey datasets (time-use and expenditure surveys)
 3. Train and evaluate machine learning models to predict a survey
 4. Generate population-level predictions from the fitted model
-5. Integrate population-level surveys with each other
+5. Conduct input-output analysis to estimate the carbon intensity of expenditure categories
+6. Assign household emissions to individual household members based on their predicted time-use
 
 
 ### Setup
 
-This code is designed to run on CBS. Therefore no datafiles are available on github. The package requirements can be found in requirements.txt. You can read more about creating a python environment on the CBS Microdata environment [here](https://github.com/sodascience/cbs_python/).
+This code is designed to run on the CBS Microdata environment. Therefore no datafiles are available on github. The package requirements can be found in requirements.txt. You can read more about creating a python environment on the CBS Microdata environment [here](https://github.com/sodascience/cbs_python/).
 
 
 ### Overview of Main Scripts
 
 | Script                        | Description                           | Outcome                                                                                       |
 | ----------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | 
-| `01_process_demographics.py`  | Integrates multiple CBS datasets      | `Parquet` file containing all relevant demographic data (at individual & at household level; *population data*) | 
-| `02_process_survey.py`        | Processes survey to be predicted      | `Parquet` file containing one id variable and all survey variables to be predicted (*survey data*)              |
-| `03_train_model.py`           | Trains, tests, and fits the model that is used to predict survey data | `Joblib` file containing the final fitted model                               | 
-| `04_predict_survey.py`        | Predicts survey data at the population level | `Parquet` file containing one id variable and all predicted survey variables (*population data*)         |
+| `01_load_demographics.py`  | Loads multiple CBS datasets and creates the features needed for the machine-learning models at the individual or household level      | `Parquet` files for each feature (at individual & at household level; *population data*) | 
+| `02_process_survey.py`        | Processes survey to be predicted      | `Parquet` file containing id variables and all outcome variables to be predicted (*survey data*)              |
+| `03_train_models.py`           | Trains, tests, tunes, and fits the models that are used to predict the survey data | `Joblib` file containing the final fitted model                               | 
+| `04_predict_surveys.py`        | Predicts survey data at the population level | `Parquet` file containing id variables and all predicted survey variables (*population data*)         |
+| `05_input_output_analysis.py` | Conducts the input-output analysis to estimate the carbon intensity (kg CO² / € spent) of expenditure categories | `csv` file containing the emission intensities per expenditure category         |
+| `06_assign_emissions_to_ind.py` | Calculates the household emissions from the predicted household expenditures and assigns them to the different household members based on their predicted individual time-use | `Parquet` files containing id variables and (a) the household carbon emissions and (b) the individual carbon emissions (*population data*)         |
 
 
-### 1. Process Demographics
+### 1. Load Demographics
 
-First, we create the demographic dataset that contains the features (predictors) of the models. For this, we read in multiple CBS datasets, process their data, and integrate them into the main dataset.
+We load the demographic features that are used to predict the survey data. 
+These features are derived from multiple CBS datasets and contain information about the individuals and households in the Netherlands.
+The script `01_load_demographics.py` creates `Parquet` files for each feature (at individual & at household level). This is data at the population level.
 
-Since the surveys the we are working with contain data at the individual (timeuse) and household (expenditure) level, we create two versions of the same demographic dataset - one at each level of the data.
 
 ### 2. Process Survey Data
 
-Second, we process the surveys that we aim to predict. Of course, this processing is highly survey specific. The resulting datasets only contain an id variable and the survey variables to be predicted. 
+We process the surveys that we aim to predict. Of course, this processing is highly survey specific. The resulting datasets only contain id variables and the survey variables to be predicted. 
 
 For the **time-use survey**, we have aggregated all primary and secondary activities to obtain the number of hours that each person spends on 113 activities (e.g. 'eating', 'showering', 'preparing food', ...).
 
@@ -50,26 +63,36 @@ For the **expenditure survey**, we have aggregated all household expenditures to
 
 ### 3. Train & Test Models
 
-Third, we train, test, and fit the machine learning model to each survey. Specifically, we first train a model to 80% of the survey data (for each survey). Then, we evaluate the prediction quality on the remaining 20% of the data (of each survey). This process can be performed for different kinds of models, such as a baseline model and a machine learning model, to compare the prediction qualities with each other. Eventually, this process will also entail hyperparameter tuning (currently under development).
-
-Lastly, we fit the model to the whole survey dataset. The resulting model will be used for the survey predictions in the next step.
+We train the machine learning models to predict the outcome variables of each survey (step 2) using the demographic features created in step 1. 
+Specifically, we train a model to 85% of the survey data (for each survey) and tune the hyperparameters (if applicable) on a 5-fold cross-validation. 
+Then, we evaluate the prediction quality on the remaining 15% of the data (of each survey). 
+This process can be performed for different kinds of models. In our case, we train a baseline model as well as a machine learning model per survey.
+Finally, we fit the best model to the training data. The result is a fitted model stored as a `joblib` file that can be used to predict survey data at the population level.
 
 ###  4. Predict at the Population Level
 
-Fourth, we use the fitted model that was created in the last step to predict survey data at the population level. The result is a dataset that contains an id variable together with the predicted variables for the respective survey.
+We use the fitted model that was created in the last step to predict survey data at the population level. 
+The result is a dataset consisting of multiple `Parquet` files that contain id variables together with the predicted outcome variables for the respective survey.
 
-### 5. Integrate Population-Level Surveys
+---
 
-Fifth, we integrate the two surveys with each other. This is a highly context-specific process. In our case, we use a [concordance table](processed_data/meta/mapping_budget-TBO.xlsx) that matches each expenditure variable to a timeuse variable. This allowed us to assign the carbon emissions - calculated from the (predicted) expenditures - to each individual living in a household, on the basis of their predicted timeuse.
+*The following steps are highly context-specific and depend on the research question. Please see the `Context` section above for more details.*
 
-*Please note, the code is currently under development*
+### 5. Input-Output Analysis
 
-### 6. Analyse
+We conduct an input-output analysis to estimate the carbon intensity (kg CO² / € spent) of expenditure categories. The result is a `csv` file containing the emission intensities per expenditure category.
 
-Sixth, we analyse the population-level data. In our case, we analyse demographic patterns in individual carbon emissions.
+### 6. Assign Emissions to Individuals
 
-*Please note, the code is currently under development*
+We calculate the household emissions from the predicted household expenditures and assign them to the different household members based on their predicted individual time-use. 
+To do this, we use a [concordance table](processed_data/meta/mapping_budget-TBO.xlsx) that matches each expenditure variable to a timeuse variable.
+The results are stored in `Parquet` files that contain id variables and either (a) the household carbon emissions or (b) the individual carbon emissions.
 
+### 7. Analyse
+
+We analyse the population-level data. In our case, we analyse demographic patterns in individual carbon emissions.
+
+*This code is still under development* 
 
 
 ## Contact
