@@ -3,8 +3,8 @@ from pathlib import Path
 from config.units import *
 
 RAW = Path("G:/")
-CACHE = Path("H:/Maike/processed_data/cache")
-OUT = Path("H:/Maike/processed_data")
+OUT = Path(__file__).resolve().parents[1] / "data" / "processed_data"
+CACHE = OUT / "cache"
 
 
 class Datasets(Namespace):

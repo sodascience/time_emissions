@@ -33,46 +33,45 @@ Eventually, we assign these emissions to the individual household members based 
 
 This code is designed to run on the CBS Microdata environment. Therefore no datafiles are available on github. The package requirements can be found in requirements.txt. You can read more about creating a python environment on the CBS Microdata environment [here](https://github.com/sodascience/cbs_python/).
 
+### Data output
+
+The project saves its output and temporary data in `data/processed_data/`. You can find an overview of the folders and the files they contain in [`data/processed_data/README.md`](data/processed_data/README.md). Git does not track generated data, and the input data are stored separately.
+
 
 ### Overview of Main Scripts
 
-| Script                        | Description                           | Outcome                                                                                       |
-| ----------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | 
-| `01_load_demographics.py`  | Loads multiple CBS datasets and creates the features needed for the machine-learning models at the individual or household level      | `Parquet` files for each feature (at individual & at household level; *population data*) | 
-| `02_process_survey.py`        | Processes survey to be predicted      | `Parquet` file containing id variables and all outcome variables to be predicted (*survey data*)              |
-| `03_train_models.py`           | Trains, tests, tunes, and fits the models that are used to predict the survey data | `Joblib` file containing the final fitted model                               | 
-| `04_predict_surveys.py`        | Predicts survey data at the population level | `Parquet` file containing id variables and all predicted survey variables (*population data*)         |
-| `05_input_output_analysis.py` | Conducts the input-output analysis to estimate the carbon intensity (kg CO² / € spent) of expenditure categories | `csv` file containing the emission intensities per expenditure category         |
-| `06_assign_emissions_to_ind.py` | Calculates the household emissions from the predicted household expenditures and assigns them to the different household members based on their predicted individual time-use | `Parquet` files containing id variables and (a) the household carbon emissions and (b) the individual carbon emissions (*population data*)         |
+| Script | Description | Outcome |
+| --- | --- | --- |
+| `01_load_demographics.py` | Caches register tables and mappings, then builds demographic features for individuals and households. | Cached Parquet tables and year-specific Parquet feature files, split into batches where needed. |
+| `02_process_expenditures.py`, `02_process_timeuse.py` | These Python files are placeholders. Survey preparation is currently done by the R scripts in `src/process_surveys/`. | Prepared survey Parquet files. The R scripts currently write them under `H:/Maike/processed_data/surveys/`. |
+| `03_train_models.py` | Builds the response and predictor tables, then trains and evaluates each survey's baseline and main model. | `responses_at_unit.parquet`, fitted `pipeline.joblib` files, optional `params.json` files, and `evaluation.parquet`. |
+| `04_predict_surveys.py` | Predicts both models for the survey samples and the main model for the population. | Batched Parquet prediction files, with run metadata and completion markers. |
+| `05_input_output_analysis.py` | Calculates weighted population expenditure totals for each category. The separate input-output workflow (under `src/input_output_analysis/IO_analysis/`) is used to calculate emission intensities. | `expenditures_population_sums.parquet`; the input-output workflow should provide `emission_intensity_per_expenditure.csv`. |
+| `06_assign_emissions_to_ind.py` | Calculates household emissions and distributes them to household members using predicted time-use. | Batched Parquet files for household and individual emissions, with run metadata and completion markers. |
 
 
 ### 1. Load Demographics
 
-We load the demographic features that are used to predict the survey data. 
-These features are derived from multiple CBS datasets and contain information about the individuals and households in the Netherlands.
-The script `01_load_demographics.py` creates `Parquet` files for each feature (at individual & at household level). This is data at the population level.
+We build demographic features from CBS register datasets. The script `01_load_demographics.py` first caches the typed dataset tables and mapping tables, then writes a Parquet file for each feature and year. Feature files may be split into batches and are stored separately for household-month and person-household-month tables. These features describe the population and are later used as model predictors.
 
 
 ### 2. Process Survey Data
 
-We process the surveys that we aim to predict. Of course, this processing is highly survey specific. The resulting datasets only contain id variables and the survey variables to be predicted. 
+Survey preparation is specific to each survey. The Python scripts `02_process_expenditures.py` and `02_process_timeuse.py` are currently placeholders; the actual processing is in `src/process_surveys/expenditures.R` and `src/process_surveys/timeuse.R`. 
 
-For the **time-use survey**, we have aggregated all primary and secondary activities to obtain the number of hours that each person spends on 113 activities (e.g. 'eating', 'showering', 'preparing food', ...).
+For the **time-use survey**, the R script aggregates primary and secondary activities and converts the reported time to average hours per day. Its current output contains 114 activity variables (for example, eating, showering, and preparing food), alongside identifiers and the survey weight.
 
-For the **expenditure survey**, we have aggregated all household expenditures to a higher (i.e. less detailed) level. Specifically, the dataset now contains variables indicating how much money each household spent on 156 categories (e.g. 'meat', 'vegetables', 'clothes', 'gasoline', 'furniture', ...).
+For the **expenditure survey**, the R script combines expenditure subcategories and converts annual amounts to daily amounts. The resulting file contains household expenditure variables and identifiers.
 
 ### 3. Train & Test Models
 
-We train the machine learning models to predict the outcome variables of each survey (step 2) using the demographic features created in step 1. 
-Specifically, we train a model to 85% of the survey data (for each survey) and tune the hyperparameters (if applicable) on a 5-fold cross-validation. 
-Then, we evaluate the prediction quality on the remaining 15% of the data (of each survey). 
-This process can be performed for different kinds of models. In our case, we train a baseline model as well as a machine learning model per survey.
-Finally, we fit the best model to the training data. The result is a fitted model stored as a `joblib` file that can be used to predict survey data at the population level.
+The Python pipeline reads each prepared survey file and maps its responses to the unit used by that survey's models. It writes `responses_at_unit.parquet` with the unit identifiers, target variables, survey weight when available, and a train/test split. It also builds predictor tables from the demographic features.
+
+For each survey, the pipeline trains a baseline and a main model on the training portion of the data. The split is 85% for training and 15% for testing. If a model has tunable parameters, the pipeline searches them using five-fold cross-validation. It evaluates both models on the test data and saves a fitted `pipeline.joblib` for each one, along with tuning settings and evaluation results where applicable.
 
 ###  4. Predict at the Population Level
 
-We use the fitted model that was created in the last step to predict survey data at the population level. 
-The result is a dataset consisting of multiple `Parquet` files that contain id variables together with the predicted outcome variables for the respective survey.
+The pipeline uses each survey's main model to predict its outcomes for the population in each configured year. It also writes predictions from both models for each survey sample. Population predictions are saved as numbered Parquet batches; predictions for a survey sample are written as a single batch. Each completed prediction folder includes run metadata and a `done` marker.
 
 ---
 
@@ -80,13 +79,11 @@ The result is a dataset consisting of multiple `Parquet` files that contain id v
 
 ### 5. Input-Output Analysis
 
-We conduct an input-output analysis to estimate the carbon intensity (kg CO² / € spent) of expenditure categories. The result is a `csv` file containing the emission intensities per expenditure category.
+The script `05_input_output_analysis.py` calculates weighted population expenditure totals and saves them in `input_output_analysis/expenditures_population_sums.parquet`. The separate input-output workflow under `src/input_output_analysis/IO_analysis/` is used to estimate the carbon intensity of each expenditure category. Its result, `emission_intensity_per_expenditure.csv`, is read by the next step.
 
 ### 6. Assign Emissions to Individuals
 
-We calculate the household emissions from the predicted household expenditures and assign them to the different household members based on their predicted individual time-use. 
-To do this, we use a [concordance table](processed_data/meta/mapping_budget-TBO.xlsx) that matches each expenditure variable to a timeuse variable.
-The results are stored in `Parquet` files that contain id variables and either (a) the household carbon emissions or (b) the individual carbon emissions.
+The emissions assignment step multiplies household expenditure predictions (or observed expenditures) by their emission intensities to calculate household emissions. It then uses predicted time-use to divide those emissions among household members. The required weighted mapping is `input_output_analysis/mapping_exp_timeuse_weighted.parquet`; it is prepared by `src/input_output_analysis/calc__mapping_exp_timeuse_weighted.R` from an expenditure-to-time-use mapping workbook. The Python step writes household and individual results as Parquet batches, with run metadata and a completion marker.
 
 ### 7. Analyse
 
